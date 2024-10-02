@@ -75,6 +75,10 @@ button{
     margin: 15px 0;
 }
 
+.tweet-detail{
+    color:#999
+}
+
 .tweet-inner{
     display: flex;
     align-items: flex-start;

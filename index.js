@@ -64,13 +64,25 @@ feed.innerHTML = getFeedHtml(tweets)
 render(tweetsData)
 
 document.addEventListener("click",(e) => {
+    detectReply(e)
+    detectLike(e)
+    if(e.target.dataset.retweets){
+        handleRetweet(e.target.dataset.retweets)
+    }
+})
+
+function detectReply(e){
     if(e.target.dataset.replies){
         console.log(e.target.dataset.replies)
     }
+}
+
+function detectLike(e){
     if(e.target.dataset.hearts){
         console.log(e.target.dataset.hearts)
     }
-    if(e.target.dataset.retweets){
-        console.log(e.target.dataset.retweets)
-    }
-})
+}
+
+function handleRetweet(tweetUuid){
+    console.log(tweetUuid)
+}

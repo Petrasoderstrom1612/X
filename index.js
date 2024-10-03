@@ -7,8 +7,6 @@ tweetBtn.addEventListener("click", function(){
     myInput.value =""
 })
 
-
-
 function getFeedHtml(tweets){
 let tweetsection = ""
 let comments = ""
@@ -56,33 +54,48 @@ tweets.forEach((oneTweet) =>{         //I USED FOREACH IN THE FIRST FORLOOP TO H
 return tweetsection
 }
     
-
 function render(tweets){ //you can place any word in here as long as it matches within the function, the function above gets it that it is the same thing, it is the render call with the real data.js that is avgörande. Also if you call the real thing every time, you do not need any arguments in any of the functions.
 feed.innerHTML = getFeedHtml(tweets)
 }
 
 render(tweetsData)
 
+
 document.addEventListener("click",(e) => {
-    detectReply(e)
-    detectLike(e)
+    if(e.target.dataset.replies){
+        detectReply(e.target.dataset.replies)
+    }
+    if(e.target.dataset.hearts){
+        detectLike(e.target.dataset.hearts)
+    }
     if(e.target.dataset.retweets){
         handleRetweet(e.target.dataset.retweets)
     }
 })
 
-function detectReply(e){
-    if(e.target.dataset.replies){
-        console.log(e.target.dataset.replies)
-    }
+function detectReply(tweetUuid){
+    tweetsData.forEach((tweet) => {
+        if (tweet.uuid === tweetUuid){
+            tweet.replies.push(1)
+            console.log(tweet)
+        }
+    })
 }
 
-function detectLike(e){
-    if(e.target.dataset.hearts){
-        console.log(e.target.dataset.hearts)
-    }
+function detectLike(tweetUuid){
+        for (let i =0; i < tweetsData.length;i++){
+            if(tweetsData[i].uuid === tweetUuid){
+                tweetsData[i].likes ++
+                console.log(tweetsData[i])
+            }
+        }
 }
 
 function handleRetweet(tweetUuid){
-    console.log(tweetUuid)
+    tweetsData.map((tweet) => {
+        if (tweetUuid === tweet.uuid){
+            tweet.retweets++
+            console.log(tweet)
+        }
+    })
 }

@@ -74,12 +74,13 @@ document.addEventListener("click",(e) => {
 })
 
 function detectReply(tweetUuid){
-    tweetsData.forEach((tweet) => {
-        if (tweet.uuid === tweetUuid){
-            tweet.replies.push(1)
-            console.log(tweet)
-        }
-    })
+    const targetTweetObj = tweetsData.filter((tweet) => {
+        return tweet.uuid === tweetUuid                     //when you filter, you want to return truth or false
+    })[0]                                                   //filter method iterates over an array of objects and returns a shallow copy with a filtered out array, if you want to return object, then use [] 
+    targetTweetObj.replies.push(1)
+    console.log(targetTweetObj)
+    console.log(tweetsData)                                 //when modifying advanced data types such as objects and arrays, you modify the type on the stack, in other words, the original changes
+    return targetTweetObj
 }
 
 function detectLike(tweetUuid){

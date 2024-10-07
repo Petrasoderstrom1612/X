@@ -65,10 +65,10 @@ document.addEventListener("click",(e) => { // 3 LISTENERS ON ICON CLICKS VIA DAT
     if(e.target.dataset.replies){
         detectReply(e.target.dataset.replies)
     }
-    if(e.target.dataset.hearts){
+    else if(e.target.dataset.hearts){
         handleLike(e.target.dataset.hearts)
     }
-    if(e.target.dataset.retweets){
+    else if(e.target.dataset.retweets){
         handleRetweet(e.target.dataset.retweets)
     }
     render(tweetsData)  //taking advantage of shallow copy to just reassign icons as the original data.js changes when shallow copy is created
@@ -82,19 +82,6 @@ function detectReply(tweetUuid){
     console.log(targetTweetObj)
     console.log(tweetsData)                                 //when modifying advanced data types such as objects and arrays, you modify the type on the stack, in other words, the original changes
 }
-
-// function detectLike(tweetUuid){
-//         for (let i =0; i < tweetsData.length;i++){
-//             if(tweetsData[i].uuid === tweetUuid && !tweetsData[i].isLiked){
-//                 tweetsData[i].likes ++
-//                 console.log(tweetsData[i])
-//             } else if (tweetsData[i].uuid === tweetUuid && tweetsData[i].isLiked){
-//                 tweetsData[i].likes --
-//                 console.log(tweetsData[i])
-//             }
-//             tweetsData[i].isLiked = !tweetsData[i].isLiked 
-//         }
-// }
 
 function handleLike(tweetUuid){ 
     const targetTweetObj = tweetsData.filter(function(tweet){
@@ -122,3 +109,16 @@ function handleRetweet(tweetUuid){
         } 
     })
 }
+
+// function detectLike(tweetUuid){
+//         for (let i =0; i < tweetsData.length;i++){
+//             if(tweetsData[i].uuid === tweetUuid && !tweetsData[i].isLiked){
+//                 tweetsData[i].likes ++
+//                 console.log(tweetsData[i])
+//             } else if (tweetsData[i].uuid === tweetUuid && tweetsData[i].isLiked){
+//                 tweetsData[i].likes --
+//                 console.log(tweetsData[i])
+//             }
+//             tweetsData[i].isLiked = !tweetsData[i].isLiked 
+//         }
+// }

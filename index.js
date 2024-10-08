@@ -16,10 +16,10 @@ function getFeedHtml(tweets){ //THE HTML CREATOR
     let heartsClass = ""
     let retweetClass = ""
 
-    if(oneTweet.isLiked){
+    if(oneTweet.isLiked){ //checking in the data.js which I might have modified through shallow copy
         heartsClass = "liked"
     }
-    if(oneTweet.isRetweeted){
+    if(oneTweet.isRetweeted){ //checking in the data.js which I might have modified through shallow copy
         retweetClass = "retweeted"
     }
     
@@ -93,10 +93,10 @@ function handleLike(tweetUuid){
     })[0] //shallow copy of tweetsData object created, it means the original data is modifiable with every new change
 
     if (targetTweetObj.isLiked){
-        targetTweetObj.likes--
+        targetTweetObj.likes-- //modifying the filtered shallow copy
     }
     else{
-        targetTweetObj.likes++ 
+        targetTweetObj.likes++  //modifying the filtered shallow copy
     }
     targetTweetObj.isLiked = !targetTweetObj.isLiked
 }
@@ -105,9 +105,9 @@ function handleRetweet(tweetUuid){
     tweetsData.map((tweet) => { //shallow copy of tweetsData object created, it means the original data is modifiable with every new change
         if (tweetUuid === tweet.uuid){
             if(tweet.isRetweeted){
-                tweet.retweets --
+                tweet.retweets -- //modifying the filtered shallow copy
             } else if(!tweet.isRetweeted){
-                tweet.retweets ++
+                tweet.retweets ++ //modifying the filtered shallow copy
             }
             tweet.isRetweeted = !tweet.isRetweeted
         } 

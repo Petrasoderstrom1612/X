@@ -12,64 +12,64 @@ function getFeedHtml(tweets){ //THE HTML CREATOR
     let tweetsection = ""
     
     tweets.forEach((oneTweet) =>{         //I USED FOREACH IN THE FIRST BIG FORLOOP TO HAVE VARIATION
-    let heartsClass = ""
-    let retweetClass = ""
-    let comments = ""
+        let heartsClass = ""
+        let retweetClass = ""
+        let comments = ""
 
-    if(oneTweet.isLiked){ //checking in the data.js which I might have modified through shallow copy
-        heartsClass = "liked"
-    }
-    if(oneTweet.isRetweeted){ //checking in the data.js which I might have modified through shallow copy
-        retweetClass = "retweeted"
-    }
-    
-    if (oneTweet.isCommented){ //DEEPER LOOP IN IF TO GET OBJECTS IN THE ARRAY OF REPLIES IN EVERY TWEET INSIDE OF A VARIABLE
-            for (let oneReply of oneTweet.replies){
-                comments += `
-                <div>
-                <div class="tweet-inner" style="flex-direction:column;">
-                <img src="${oneReply.profilePic}" class="profile-pic"/>
-                <p class="handle">${oneReply.handle}</p>
-                <p class="tweet-text">${oneReply.tweetText}</p>
-                </div>
-                </div>
-                
-                `
+        if(oneTweet.isLiked){ //checking in the data.js which I might have modified through shallow copy
+            heartsClass = "liked"
         }
-            
-    }
+        if(oneTweet.isRetweeted){ //checking in the data.js which I might have modified through shallow copy
+            retweetClass = "retweeted"
+        }
+        
+        if (oneTweet.isCommented){ //DEEPER LOOP IN IF TO GET OBJECTS IN THE ARRAY OF REPLIES IN EVERY TWEET INSIDE OF A VARIABLE
+                for (let oneReply of oneTweet.replies){
+                    comments += `
+                    <div>
+                    <div class="tweet-inner" style="flex-direction:column;">
+                    <img src="${oneReply.profilePic}" class="profile-pic"/>
+                    <p class="handle">${oneReply.handle}</p>
+                    <p class="tweet-text">${oneReply.tweetText}</p>
+                    </div>
+                    </div>
+                    
+                    `
+            }
+                
+        }
     
-    tweetsection +=  // creating all HTML, note ${comments} where I place the deeper loop's variable
-    ` 
-    <div class="tweet">
-        <div class="tweet-inner">
-            <img src="${oneTweet.profilePic}" class="profile-pic">
-            <div>
-                <p class="handle">${oneTweet.handle}</p>
-                <p class="tweet-text">${oneTweet.tweetText}</p>
-                <div class="tweet-details">
-                    <span class="tweet-detail"><i class="fa-regular fa-comment-dots" data-replies="${oneTweet.uuid}"></i>${oneTweet.replies.length} </span>
-                    </br>
-                    <span class="tweet-detail">
-                       <i class="fa-solid fa-heart ${heartsClass}" data-hearts="${oneTweet.uuid}"></i> ${oneTweet.likes}
-                    </span>
-                    <span class="tweet-detail">
-                        <i class="fa-solid fa-retweet ${retweetClass}" data-retweets="${oneTweet.uuid}"></i>${oneTweet.retweets}
-                    </span>
-                    <p>
-                    ${comments} 
-                    </p>
-                </div>   
-            </div>            
+        tweetsection +=  // creating all HTML, note ${comments} where I place the deeper loop's variable
+        ` 
+        <div class="tweet">
+            <div class="tweet-inner">
+                <img src="${oneTweet.profilePic}" class="profile-pic">
+                <div>
+                    <p class="handle">${oneTweet.handle}</p>
+                    <p class="tweet-text">${oneTweet.tweetText}</p>
+                    <div class="tweet-details">
+                        <span class="tweet-detail"><i class="fa-regular fa-comment-dots" data-replies="${oneTweet.uuid}"></i>${oneTweet.replies.length} </span>
+                        </br>
+                        <span class="tweet-detail">
+                        <i class="fa-solid fa-heart ${heartsClass}" data-hearts="${oneTweet.uuid}"></i> ${oneTweet.likes}
+                        </span>
+                        <span class="tweet-detail">
+                            <i class="fa-solid fa-retweet ${retweetClass}" data-retweets="${oneTweet.uuid}"></i>${oneTweet.retweets}
+                        </span>
+                        <p>
+                        ${comments} 
+                        </p>
+                    </div>   
+                </div>            
+            </div>
         </div>
-    </div>
-    `
-    })
-return tweetsection
-}
-    
-function render(tweets){ //you can place any word in here as long as it matches within the function, the function above gets it that it is the same thing, it is the render call with the real data.js that is avgörande. Also if you call the real thing every time, you do not need any arguments in any of the functions.
-feed.innerHTML = getFeedHtml(tweets)
+        `
+        })
+    return tweetsection
+    }
+        
+    function render(tweets){ //you can place any word in here as long as it matches within the function, the function above gets it that it is the same thing, it is the render call with the real data.js that is avgörande. Also if you call the real thing every time, you do not need any arguments in any of the functions.
+    feed.innerHTML = getFeedHtml(tweets)
 }
 
 render(tweetsData)

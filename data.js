@@ -9,6 +9,7 @@ export const tweetsData = [
         replies: [],
         isLiked: false,
         isRetweeted: false,
+        isCommented: false,
         uuid: '4b161eee-c0f5-4545-9c4b-8562944223ee',
     },    
     {
@@ -18,14 +19,14 @@ export const tweetsData = [
         retweets: 234,
         tweetText: `I need volunteers for a one-way mission to Mars 🪐. No experience necessary🚀`,
         replies: [
-                  {
+            {
                 handle: `@TomCruise ✅`,
-                profilePic: `images/tcruise.png`,
+                profilePic: `images/tcruise.jpg`,
                 tweetText: `Yes! Sign me up! 😎🛩`,
             },
-                  {
+            {
                 handle: `@ChuckNorris ✅`,
-                profilePic: `images/chucknorris.jpeg`,
+                profilePic: `images/chucknorris.jpg`,
                 tweetText: `I went last year😴`,
             },
         ],
@@ -33,9 +34,9 @@ export const tweetsData = [
         isRetweeted: false,
         uuid: '3c23454ee-c0f5-9g9g-9c4b-77835tgs2',
     },
-        {
+    {
         handle: `@NoobCoder12`,
-        profilePic: `images/flower.png`,
+        profilePic: `images/Lee.jpg`,
         likes: 10,
         retweets: 3,
         tweetText: `Are you a coder if you only know HTML?`,
@@ -47,11 +48,12 @@ export const tweetsData = [
             },
             {
                 handle: `@YummyCoder64`,
-                profilePic: `images/love.png`,
+                profilePic: `images/Sanna.jpg`,
                 tweetText: `You are wonderful just as you are! ❤️`,
             },
         ],
         isLiked: false,
+        isCommented: false,
         isRetweeted: false,
         uuid: '8hy671sff-c0f5-4545-9c4b-1237gyys45',
     },     

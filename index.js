@@ -10,11 +10,11 @@ tweetBtn.addEventListener("click", function(){
 
 function getFeedHtml(tweets){ //THE HTML CREATOR
     let tweetsection = ""
-    let comments = ""
     
     tweets.forEach((oneTweet) =>{         //I USED FOREACH IN THE FIRST BIG FORLOOP TO HAVE VARIATION
     let heartsClass = ""
     let retweetClass = ""
+    let comments = ""
 
     if(oneTweet.isLiked){ //checking in the data.js which I might have modified through shallow copy
         heartsClass = "liked"
@@ -23,13 +23,15 @@ function getFeedHtml(tweets){ //THE HTML CREATOR
         retweetClass = "retweeted"
     }
     
-    if (oneTweet.replies.length > 0){ //DEEPER LOOP IN IF TO GET OBJECTS IN THE ARRAY OF REPLIES IN EVERY TWEET INSIDE OF A VARIABLE
+    if (oneTweet.isCommented){ //DEEPER LOOP IN IF TO GET OBJECTS IN THE ARRAY OF REPLIES IN EVERY TWEET INSIDE OF A VARIABLE
             for (let oneReply of oneTweet.replies){
                 comments += `
                 <div>
-                <p>${oneReply.handle}</p>
-                <img src="${oneReply.profilePic}"/>
-                <p>${oneReply.tweetText}</p>
+                <div class="tweet-inner" style="flex-direction:column;">
+                <img src="${oneReply.profilePic}" class="profile-pic"/>
+                <p class="handle">${oneReply.handle}</p>
+                <p class="tweet-text">${oneReply.tweetText}</p>
+                </div>
                 </div>
                 
                 `
@@ -118,9 +120,14 @@ function detectReply(tweetUuid){
     const targetTweetObj = tweetsData.filter((tweet) => {
         return tweet.uuid === tweetUuid                     //when you filter, you want to return truth or false
     })[0]                                                   //filter method iterates over an array of objects and returns a shallow copy with a filtered out array, if you want to return object, then use [] 
-    targetTweetObj.replies.push(1)
-    console.log(targetTweetObj)
-    console.log(tweetsData)                                 //when modifying advanced data types such as objects and arrays, you modify the type on the heap, in other words, the original changes
+
+    console.log(targetTweetObj)//when modifying advanced data types such as objects and arrays, you modify the type on the heap, in other words, the original changes
+    console.log(tweetsData) //same SHALLOW
+    
+    if (targetTweetObj.replies.length > 0){
+        targetTweetObj.isCommented = !targetTweetObj.isCommented
+    }
+
 }
 
 

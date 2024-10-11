@@ -44,7 +44,7 @@ export const tweetsData = [
             {
                 handle: `@StackOverflower ☣️`,
                 profilePic: `images/overflow.png`,
-                tweetText: `No. Onviosuly not. Go get a job in McDonald's.`,
+                tweetText: `No. Obviously not. Go get a job in McDonald's.`,
             },
             {
                 handle: `@YummyCoder64`,

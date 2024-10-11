@@ -26,12 +26,14 @@ function getFeedHtml(tweets){ //THE HTML CREATOR
         if (oneTweet.isCommented){ //DEEPER LOOP IN IF TO GET OBJECTS IN THE ARRAY OF REPLIES IN EVERY TWEET INSIDE OF A VARIABLE
                 for (let oneReply of oneTweet.replies){
                     comments += `
-                    <div>
-                    <div class="tweet-inner" style="flex-direction:column;">
-                    <img src="${oneReply.profilePic}" class="profile-pic"/>
-                    <p class="handle">${oneReply.handle}</p>
-                    <p class="tweet-text">${oneReply.tweetText}</p>
-                    </div>
+                    <div class="tweet-reply">
+                        <div class="tweet-inner">
+                            <img src="${oneReply.profilePic}" class="profile-pic">
+                                <div>
+                                    <p class="handle">${oneReply.handle}</p>
+                                    <p class="tweet-text">${oneReply.tweetText}</p>
+                                </div>
+                            </div>
                     </div>
                     
                     `
@@ -49,19 +51,14 @@ function getFeedHtml(tweets){ //THE HTML CREATOR
                     <p class="tweet-text">${oneTweet.tweetText}</p>
                     <div class="tweet-details">
                         <span class="tweet-detail"><i class="fa-regular fa-comment-dots" data-replies="${oneTweet.uuid}"></i>${oneTweet.replies.length} </span>
-                        </br>
-                        <span class="tweet-detail">
-                        <i class="fa-solid fa-heart ${heartsClass}" data-hearts="${oneTweet.uuid}"></i> ${oneTweet.likes}
-                        </span>
-                        <span class="tweet-detail">
-                            <i class="fa-solid fa-retweet ${retweetClass}" data-retweets="${oneTweet.uuid}"></i>${oneTweet.retweets}
-                        </span>
-                        <p>
-                        ${comments} 
-                        </p>
+                        <span class="tweet-detail"><i class="fa-solid fa-heart ${heartsClass}" data-hearts="${oneTweet.uuid}"></i> ${oneTweet.likes}</span>
+                        <span class="tweet-detail"><i class="fa-solid fa-retweet ${retweetClass}" data-retweets="${oneTweet.uuid}"></i>${oneTweet.retweets}</span>
                     </div>   
                 </div>            
             </div>
+             <div id="replies-${oneTweet.uuid}">
+                 ${comments}
+             </div>  
         </div>
         `
         })
@@ -125,7 +122,7 @@ function detectReply(tweetUuid){
     console.log(tweetsData) //same SHALLOW
     
     if (targetTweetObj.replies.length > 0){
-        targetTweetObj.isCommented = !targetTweetObj.isCommented
+        targetTweetObj.isCommented = !targetTweetObj.isCommented //JS magic, you can add properties to data.js on the go
     }
 
 }

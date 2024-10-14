@@ -1,10 +1,29 @@
 import {tweetsData} from "./data.js"
 const tweetBtn = document.getElementById("tweet-btn")
 const myInput = document.getElementById("my-input")
+import { v4 as uuidv4 } from 'https://jspm.dev/uuid'
 
 
 tweetBtn.addEventListener("click", function(){
     console.log(myInput.value)
+    const tweetId = uuidv4();
+    console.log(tweetId)
+    document.getElementById('feed').innerHTML += `
+    <div class="tweet">
+    <div class="tweet-inner">
+    <img src="images/chamelleon.jpg" class="profile-pic">
+    <div>
+    <p class="handle">Petra S</p>
+    <p class="tweet-text">${myInput.value}</p>
+    <div class="tweet-details">
+    <span class="tweet-detail"><i class="fa-regular fa-comment-dots" ></i>${tweetId}</span>
+    <span class="tweet-detail"><i class="fa-solid fa-heart" ></i>0</span>
+    <span class="tweet-detail"><i class="fa-solid fa-retweet" ></i>0</span>
+    </div>   
+    </div>            
+    </div>
+    </div>
+    `
     myInput.value =""
 })
 
@@ -66,7 +85,7 @@ function getFeedHtml(tweets){ //THE HTML CREATOR
     }
         
     function render(tweets){ //you can place any word in here as long as it matches within the function, the function above gets it that it is the same thing, it is the render call with the real data.js that is avgörande. Also if you call the real thing every time, you do not need any arguments in any of the functions.
-    feed.innerHTML = getFeedHtml(tweets)
+    document.getElementById('feed').innerHTML = getFeedHtml(tweets)
 }
 
 render(tweetsData)

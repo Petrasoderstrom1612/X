@@ -23,20 +23,20 @@ function getFeedHtml(tweets){ //THE HTML CREATOR
             retweetClass = "retweeted"
         }
         
-        if (oneTweet.isCommented){ //DEEPER LOOP IN IF TO GET OBJECTS IN THE ARRAY OF REPLIES IN EVERY TWEET INSIDE OF A VARIABLE
-                for (let oneReply of oneTweet.replies){
-                    comments += `
-                    <div class="tweet-reply">
-                        <div class="tweet-inner">
-                            <img src="${oneReply.profilePic}" class="profile-pic">
-                                <div>
-                                    <p class="handle">${oneReply.handle}</p>
-                                    <p class="tweet-text">${oneReply.tweetText}</p>
-                                </div>
+        if (oneTweet.replies.length > 0){ //DEEPER LOOP IN IF TO GET OBJECTS IN THE ARRAY OF REPLIES IN EVERY TWEET INSIDE OF A VARIABLE
+            for (let oneReply of oneTweet.replies){
+                comments += `
+                <div class="tweet-reply">
+                    <div class="tweet-inner">
+                        <img src="${oneReply.profilePic}" class="profile-pic">
+                            <div>
+                                <p class="handle">${oneReply.handle}</p>
+                                <p class="tweet-text">${oneReply.tweetText}</p>
                             </div>
-                    </div>
-                    
-                    `
+                        </div>
+                </div>
+                
+                `
             }
                 
         }
@@ -56,7 +56,7 @@ function getFeedHtml(tweets){ //THE HTML CREATOR
                     </div>   
                 </div>            
             </div>
-             <div id="replies-${oneTweet.uuid}">
+             <div class="hidden" id="replies-${oneTweet.uuid}">
                  ${comments}
              </div>  
         </div>
@@ -82,15 +82,17 @@ document.addEventListener("click",(e) => { // 3 LISTENERS ON ICON CLICKS VIA DAT
     else if(e.target.dataset.replies){
         detectReply(e.target.dataset.replies)
     }
-    render(tweetsData)  //taking advantage of shallow copy to just reassign icons as the original data.js changes when shallow copy is created
 })
 
 
 function handleLike(tweetUuid){ 
-    const targetTweetObj = tweetsData.filter(function(tweet){
-        return tweet.uuid === tweetUuid
-    })[0] //shallow copy of tweetsData object created, it means the original data is modifiable with every new change
-
+    const targetTweetObj = tweetsData.filter((tweet) => {   //shallow copy of tweetsData object created, it means the original data is modifiable with every new change
+        return tweet.uuid === tweetUuid                     //when you filter, you want to return truth or false
+    })[0]                                                   //filter method iterates over an array of objects and returns a shallow copy with a filtered out array, if you want to return object, then use [] 
+    
+    console.log(targetTweetObj)//when modifying advanced data types such as objects and arrays, you modify the type on the heap, in other words, the original changes
+    console.log(tweetsData) //same SHALLOW
+    
     if (targetTweetObj.isLiked){
         targetTweetObj.likes-- //modifying the filtered shallow copy
     }
@@ -98,6 +100,8 @@ function handleLike(tweetUuid){
         targetTweetObj.likes++  //modifying the filtered shallow copy
     }
     targetTweetObj.isLiked = !targetTweetObj.isLiked
+    
+    render(tweetsData)  //you need to rerender html as data.js is changed now to see the changes
 }
 
 function handleRetweet(tweetUuid){
@@ -111,23 +115,18 @@ function handleRetweet(tweetUuid){
             tweet.isRetweeted = !tweet.isRetweeted
         } 
     })
+    
+    render(tweetsData)  //you need to rerender html as data.js is changed now to see the changes
 }
 
 function detectReply(tweetUuid){
-    const targetTweetObj = tweetsData.filter((tweet) => {
-        return tweet.uuid === tweetUuid                     //when you filter, you want to return truth or false
-    })[0]                                                   //filter method iterates over an array of objects and returns a shallow copy with a filtered out array, if you want to return object, then use [] 
-
-    console.log(targetTweetObj)//when modifying advanced data types such as objects and arrays, you modify the type on the heap, in other words, the original changes
-    console.log(tweetsData) //same SHALLOW
-    
-    if (targetTweetObj.replies.length > 0){
-        targetTweetObj.isCommented = !targetTweetObj.isCommented //JS magic, you can add properties to data.js on the go
-    }
-
-}
+document.getElementById(`replies-${tweetUuid}`).classList.toggle("hidden")
+} //no need for rerender as you do not modify the data
 
 
+
+
+//---------------------------------------------------------------------------------------------------------------
 // function handleLike(tweetUuid){                         // just showing the variation you can have in forloops
 //         for (let i =0; i < tweetsData.length;i++){
 //             if(tweetsData[i].uuid === tweetUuid && !tweetsData[i].isLiked){

@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'https://jspm.dev/uuid'
 
 
 tweetBtn.addEventListener("click", function(){
-    console.log(myInput.value)
+if(myInput.value){ //only if you type something
     const petrasTweet = {
         handle: `Petra 💎`,
         profilePic: `images/chamelleon.jpg`,
@@ -19,9 +19,10 @@ tweetBtn.addEventListener("click", function(){
         }
     console.log(petrasTweet)
 
-    tweetsData.unshift(petrasTweet)
+    tweetsData.unshift(petrasTweet) //add it highest upp to the array
     myInput.value = ""
     render(tweetsData)
+}
 })
 
 function getFeedHtml(tweets){ //THE HTML CREATOR

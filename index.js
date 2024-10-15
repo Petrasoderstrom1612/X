@@ -1,29 +1,28 @@
 import {tweetsData} from "./data.js"
-const tweetBtn = document.getElementById("tweet-btn")
-const myInput = document.getElementById("my-input")
 import { v4 as uuidv4 } from 'https://jspm.dev/uuid'
 
 
-tweetBtn.addEventListener("click", function(){
-if(myInput.value){ //only if you type something
-    const petrasTweet = {
-        handle: `Petra 💎`,
-        profilePic: `images/chamelleon.jpg`,
-        likes: 0,
-        retweets: 0,
-        tweetText: myInput.value,
-        replies: [],
-        isLiked: false,
-        isRetweeted: false,
-        uuid: uuidv4()
-        }
-    console.log(petrasTweet)
+ function addOwnTweet(){
+    const myInput = document.getElementById("my-input")
+    if(myInput.value){ //only if you type something
+        const petrasTweet = {
+            handle: `Petra 💎`,
+            profilePic: `images/chamelleon.jpg`,
+            likes: 0,
+            retweets: 0,
+            tweetText: myInput.value,
+            replies: [],
+            isLiked: false,
+            isRetweeted: false,
+            uuid: uuidv4()
+            }
+        console.log(petrasTweet)
 
-    tweetsData.unshift(petrasTweet) //add it highest upp to the array
-    myInput.value = ""
-    render(tweetsData)
+        tweetsData.unshift(petrasTweet) //add it highest upp to the array
+        myInput.value = ""
+        render(tweetsData)
+    }
 }
-})
 
 function getFeedHtml(tweets){ //THE HTML CREATOR
     let tweetsection = ""
@@ -90,7 +89,10 @@ render(tweetsData)
 
 
 document.addEventListener("click",(e) => { // 3 LISTENERS ON ICON CLICKS VIA DATASET, FUNCTIONS LISTED BELOW
-    if(e.target.dataset.hearts){
+    if(e.target.id === "tweet-btn"){ // e.target.id must be equal to "tweet-btn"
+        addOwnTweet()
+    }
+    else if(e.target.dataset.hearts){
         handleLike(e.target.dataset.hearts)
     }
     else if(e.target.dataset.retweets){

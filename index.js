@@ -6,25 +6,22 @@ import { v4 as uuidv4 } from 'https://jspm.dev/uuid'
 
 tweetBtn.addEventListener("click", function(){
     console.log(myInput.value)
-    const tweetId = uuidv4();
-    console.log(tweetId)
-    document.getElementById('feed').innerHTML += `
-    <div class="tweet">
-    <div class="tweet-inner">
-    <img src="images/chamelleon.jpg" class="profile-pic">
-    <div>
-    <p class="handle">Petra S</p>
-    <p class="tweet-text">${myInput.value}</p>
-    <div class="tweet-details">
-    <span class="tweet-detail"><i class="fa-regular fa-comment-dots" ></i>${tweetId}</span>
-    <span class="tweet-detail"><i class="fa-solid fa-heart" ></i>0</span>
-    <span class="tweet-detail"><i class="fa-solid fa-retweet" ></i>0</span>
-    </div>   
-    </div>            
-    </div>
-    </div>
-    `
-    myInput.value =""
+    const petrasTweet = {
+        handle: `Petra 💎`,
+        profilePic: `images/chamelleon.jpg`,
+        likes: 0,
+        retweets: 0,
+        tweetText: myInput.value,
+        replies: [],
+        isLiked: false,
+        isRetweeted: false,
+        uuid: uuidv4()
+        }
+    console.log(petrasTweet)
+
+    tweetsData.unshift(petrasTweet)
+    myInput.value = ""
+    render(tweetsData)
 })
 
 function getFeedHtml(tweets){ //THE HTML CREATOR

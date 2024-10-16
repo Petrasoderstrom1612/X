@@ -73,7 +73,11 @@ function getFeedHtml(tweets){ //THE HTML CREATOR
                 </div>            
             </div>
              <div class="hidden" id="replies-${oneTweet.uuid}">
-                 ${comments}
+                ${comments}
+                <div class="reply-input">
+                    <input type="text" id="reply-input-${oneTweet.uuid}" placeholder="Write a reply..." />
+                    <button data-reply-btn="${oneTweet.uuid}">Reply</button>
+                </div>
              </div>  
         </div>
         `
@@ -89,8 +93,11 @@ render(tweetsData)
 
 
 document.addEventListener("click",(e) => { // 3 LISTENERS ON ICON CLICKS VIA DATASET, FUNCTIONS LISTED BELOW
-    if(e.target.id === "tweet-btn"){ // e.target.id must be equal to "tweet-btn"
-        addOwnTweet()
+    if(e.target.dataset.replies){
+        toggleComments(e.target.dataset.replies)
+    }
+    else if(e.target.dataset.replyBtn) {  // This handles the "Reply" button click
+        addOwnComment(e.target.dataset.replyBtn);
     }
     else if(e.target.dataset.hearts){
         handleLike(e.target.dataset.hearts)
@@ -98,11 +105,30 @@ document.addEventListener("click",(e) => { // 3 LISTENERS ON ICON CLICKS VIA DAT
     else if(e.target.dataset.retweets){
         handleRetweet(e.target.dataset.retweets)
     }
-    else if(e.target.dataset.replies){
-        detectReply(e.target.dataset.replies)
-    }
 })
 
+function toggleComments(tweetUuid){
+document.getElementById(`replies-${tweetUuid}`).classList.toggle("hidden")
+} //no need for rerender as you do not modify the data
+
+function addOwnComment(tweetUuid){
+    const InputField = document.getElementById(`reply-input-${tweetUuid}`)
+    let myComment = InputField.value
+
+    if(myComment){
+        tweetsData.map((tweet) => {
+            if (tweetUuid === tweet.uuid){
+                tweet.replies.unshift({
+                    handle: `Petra 💎`,
+                    profilePic: `images/chamelleon.jpg`,
+                    tweetText: myComment
+                })
+            }
+        })
+    }
+    myComment = ""
+    render(tweetsData)
+}
 
 function handleLike(tweetUuid){ 
     const targetTweetObj = tweetsData.filter((tweet) => {   //shallow copy of tweetsData object created, it means the original data is modifiable with every new change
@@ -138,9 +164,6 @@ function handleRetweet(tweetUuid){
     render(tweetsData)  //you need to rerender html as data.js is changed now to see the changes
 }
 
-function detectReply(tweetUuid){
-document.getElementById(`replies-${tweetUuid}`).classList.toggle("hidden")
-} //no need for rerender as you do not modify the data
 
 
 

@@ -54,7 +54,7 @@ textarea{
     line-height: 30px;
 }
 
-button{
+.tweet-btn{
     background-color: #1DA1F2;
     border: none;
     color: white;
@@ -136,4 +136,16 @@ button{
 
 .retweeted{
     color: limegreen;
+}
+
+.reply-input{
+    margin: 10px 0 10px 40px;
+}
+
+.reply-input > button{
+    background-color: #1DA1F2;
+    border: none;
+    color: white;
+    border-radius: 20px;
+    cursor: pointer;
 }

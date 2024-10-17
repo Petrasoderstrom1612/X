@@ -92,8 +92,12 @@ function getFeedHtml(tweets){ //THE HTML CREATOR
 render(tweetsData)
 
 
-document.addEventListener("click",(e) => { // 3 LISTENERS ON ICON CLICKS VIA DATASET, FUNCTIONS LISTED BELOW
-    if(e.target.dataset.replies){
+
+document.addEventListener("click",(e) => { // LISTENERS ON ICON CLICKS VIA DATASET, FUNCTIONS LISTED BELOW, also click on id for main tweet button
+    if(e.target.id === "tweet-btn"){
+        addOwnTweet()
+    }
+    else if(e.target.dataset.replies){
         toggleComments(e.target.dataset.replies)
     }
     else if(e.target.dataset.replyBtn) {  // This handles the "Reply" button click
@@ -118,7 +122,7 @@ function addOwnComment(tweetUuid){
     if(myComment){
         tweetsData.map((tweet) => {
             if (tweetUuid === tweet.uuid){
-                tweet.replies.unshift({
+                tweet.replies.push({
                     handle: `Petra 💎`,
                     profilePic: `images/chamelleon.jpg`,
                     tweetText: myComment
@@ -181,3 +185,5 @@ function handleRetweet(tweetUuid){
 //             tweetsData[i].isLiked = !tweetsData[i].isLiked 
 //         }
 // }
+
+//gör det så att om jag skrev en kommentar, kommentarerna inte blir hide radera min komment, radera min tweet, spara saker i local host

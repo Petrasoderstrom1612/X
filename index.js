@@ -3,10 +3,10 @@ import { v4 as uuidv4 } from 'https://jspm.dev/uuid'
 
 
  function addOwnTweet(){
-    const myInput = document.getElementById("my-input")
+    let myInput = document.getElementById("my-input")
     if(myInput.value){ //only if you type something
-        const petrasTweet = {
-            handle: `Petra 💎`,
+        let petrasTweet = {
+            handle: `Petra`,
             profilePic: `images/chamelleon.jpg`,
             likes: 0,
             retweets: 0,
@@ -46,7 +46,7 @@ function getFeedHtml(tweets){ //THE HTML CREATOR
                     <div class="tweet-inner">
                         <img src="${oneReply.profilePic}" class="profile-pic">
                             <div>
-                                <p class="handle">${oneReply.handle}</p>
+                                <p class="handle">${oneReply.handle}</p><button id="delete-tweet">X</button>
                                 <p class="tweet-text">${oneReply.tweetText}</p>
                             </div>
                         </div>
@@ -63,7 +63,7 @@ function getFeedHtml(tweets){ //THE HTML CREATOR
             <div class="tweet-inner">
                 <img src="${oneTweet.profilePic}" class="profile-pic">
                 <div>
-                    <p class="handle">${oneTweet.handle}</p>
+                    <p class="handle">${oneTweet.handle}</p><button data-delete="${oneTweet.uuid}">X</button>
                     <p class="tweet-text">${oneTweet.tweetText}</p>
                     <div class="tweet-details">
                         <span class="tweet-detail"><i class="fa-regular fa-comment-dots" data-replies="${oneTweet.uuid}"></i>${oneTweet.replies.length} </span>
@@ -97,6 +97,9 @@ document.addEventListener("click",(e) => { // LISTENERS ON ICON CLICKS VIA DATAS
     if(e.target.id === "tweet-btn"){
         addOwnTweet()
     }
+    else if(e.target.dataset.delete){
+        removeOwnComment(e.target.dataset.delete)
+    }
     else if(e.target.dataset.replies){
         toggleComments(e.target.dataset.replies)
     }
@@ -123,7 +126,7 @@ function addOwnComment(tweetUuid){
         tweetsData.map((tweet) => {
             if (tweetUuid === tweet.uuid){
                 tweet.replies.push({
-                    handle: `Petra 💎`,
+                    handle: "Petra",
                     profilePic: `images/chamelleon.jpg`,
                     tweetText: myComment
                 })
@@ -131,6 +134,14 @@ function addOwnComment(tweetUuid){
         })
     }
     myComment = ""
+    render(tweetsData)
+}
+
+function removeOwnComment(tweetUuid) {
+    const targetTweetObj = tweetsData.find((tweet) => tweet.uuid === tweetUuid);
+    if (targetTweetObj.handle === "Petra") {
+        tweetsData.splice(targetTweetObj, 1);
+    }
     render(tweetsData)
 }
 

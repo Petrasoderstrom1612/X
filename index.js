@@ -137,11 +137,11 @@ function addOwnComment(tweetUuid){
 }
 
 function removeOwnComment(tweetUuid) {
-    const targetTweetObj = tweetsData.find((tweet) => tweet.uuid === tweetUuid);
-    if (targetTweetObj.handle === "Petra") {
-        tweetsData.splice(targetTweetObj, 1);
+    const targetTweetIndex = tweetsData.findIndex((tweet) => tweet.uuid === tweetUuid);
+    if (targetTweetIndex !== -1 && tweetsData[targetTweetIndex].handle === "Petra") {
+        tweetsData.splice(targetTweetIndex, 1);
     }
-    render(tweetsData)
+    render(tweetsData);
 }
 
 function handleLike(tweetUuid){ 

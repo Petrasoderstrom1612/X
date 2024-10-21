@@ -114,31 +114,32 @@ function getFeedHtml(tweets){ //THE HTML CREATOR
     }
 }
 
-function removeOwnTweet(){
-console.log("bo")
-}
-
-function toggleComments(tweetUuid){
-    document.getElementById(`replies-${tweetUuid}`).classList.toggle("hidden")
-} //no need for rerender as you do not modify the data
-
-function addOwnComment(tweetUuid){
-    const InputField = document.getElementById(`reply-input-${tweetUuid}`)
-    let myComment = InputField.value
+// function removeOwnTweet(){
+    // console.log("bo")
+    // }
     
-    if(myComment){
-        tweetsData.map((tweet) => {
-            if (tweetUuid === tweet.uuid){
-                tweet.replies.push({
-                    handle: "Petra",
-                    profilePic: `images/chamelleon.jpg`,
-                    tweetText: myComment
-                })
-            }
-        })
-    }
+    function toggleComments(tweetUuid){
+        document.getElementById(`replies-${tweetUuid}`).classList.toggle("hidden")
+    } //no need for rerender as you do not modify the data
+    
+    function addOwnComment(tweetUuid){
+        const InputField = document.getElementById(`reply-input-${tweetUuid}`)
+        let myComment = InputField.value
+        
+        if(myComment){
+            tweetsData.map((tweet) => {
+                if (tweetUuid === tweet.uuid){
+                    tweet.replies.push({
+                        handle: "Petra",
+                        profilePic: `images/chamelleon.jpg`,
+                        tweetText: myComment
+                    })
+                }
+            })
+        }
     myComment = ""
     render(tweetsData)
+    toggleComments(tweetUuid)
 }
 
 function removeOwnComment(tweetUuid) {

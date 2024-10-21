@@ -149,3 +149,13 @@ textarea{
     border-radius: 20px;
     cursor: pointer;
 }
+
+.delete{
+    position: relative;
+    left: 137px;
+    top: 7px;
+}
+
+.fixed-margin{
+   margin-bottom:-25px;
+}

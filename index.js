@@ -25,7 +25,7 @@ function getFeedHtml(tweets){ //THE HTML CREATOR
                 <img src="${oneReply.profilePic}" class="profile-pic">
                 <div>
                                 <p class="handle ${oneTweet.handle === 'Petra' ? 'fixed-margin' : ''}">${oneReply.handle}</p>
-                                <button data-delete-own-tweet="${oneTweet.uuid}" class="delete ${oneTweet.handle === 'Petra' ? '' : 'hidden'}">X</button>
+                                <button data-delete-own-tweet="${oneTweet.uuid}">X</button>
                                 <p class="tweet-text">${oneReply.tweetText}</p>
                             </div>
                             </div>
@@ -42,7 +42,7 @@ function getFeedHtml(tweets){ //THE HTML CREATOR
         <div class="tweet-inner">
         <img src="${oneTweet.profilePic}" class="profile-pic">
         <div>
-        <p class="handle ${oneTweet.handle === 'Petra' ? 'fixed-margin' : ''}">${oneTweet.handle}</p><button data-delete-own-comment="${oneTweet.uuid}" class="delete ${oneTweet.handle === 'Petra' ? '' : 'hidden'}">X</button>
+        <p class="handle ${oneTweet.handle === 'Petra' ? 'fixed-margin' : ''}">${oneTweet.handle}</p><button data-delete-own-tweet="${oneTweet.uuid}" class="delete ${oneTweet.handle === 'Petra' ? '' : 'hidden'}">X</button>
         <p class="tweet-text">${oneTweet.tweetText}</p>
         <div class="tweet-details">
         <span class="tweet-detail"><i class="fa-regular fa-comment-dots" data-replies="${oneTweet.uuid}"></i>${oneTweet.replies.length} </span>
@@ -76,14 +76,14 @@ function getFeedHtml(tweets){ //THE HTML CREATOR
         if(e.target.id === "tweet-btn"){
             addOwnTweet()
         }
+        else if(e.target.dataset.deleteOwnTweet){
+            removeOwnTweet(e.target.dataset.deleteOwnTweet)
+        }
         else if(e.target.dataset.replies){
             toggleComments(e.target.dataset.replies)
         }
         else if(e.target.dataset.replyBtn) { 
             addOwnComment(e.target.dataset.replyBtn);
-        }
-        else if(e.target.dataset.deleteOwnComment){
-            removeOwnComment(e.target.dataset.deleteOwnComment)
         }
         else if(e.target.dataset.hearts){
             handleLike(e.target.dataset.hearts)
@@ -114,9 +114,13 @@ function getFeedHtml(tweets){ //THE HTML CREATOR
     }
 }
 
-// function removeOwnTweet(){
-    // console.log("bo")
-    // }
+    function removeOwnTweet(tweetUuid){
+    const targetTweetIndex = tweetsData.findIndex((tweet) => tweet.uuid === tweetUuid);
+    if (targetTweetIndex !== -1 && tweetsData[targetTweetIndex].handle === "Petra") {
+        tweetsData.splice(targetTweetIndex, 1);
+    }
+    render(tweetsData);
+}
     
     function toggleComments(tweetUuid){
         document.getElementById(`replies-${tweetUuid}`).classList.toggle("hidden")
@@ -142,13 +146,13 @@ function getFeedHtml(tweets){ //THE HTML CREATOR
     toggleComments(tweetUuid)
 }
 
-function removeOwnComment(tweetUuid) {
-    const targetTweetIndex = tweetsData.findIndex((tweet) => tweet.uuid === tweetUuid);
-    if (targetTweetIndex !== -1 && tweetsData[targetTweetIndex].handle === "Petra") {
-        tweetsData.splice(targetTweetIndex, 1);
-    }
-    render(tweetsData);
-}
+// function removeOwnComment(tweetUuid) {
+//     const targetTweetIndex = tweetsData.findIndex((tweet) => tweet.uuid === tweetUuid);
+//     if (targetTweetIndex !== -1 && tweetsData[targetTweetIndex].handle === "Petra") {
+//         tweetsData.splice(targetTweetIndex, 1);
+//     }
+//     render(tweetsData);
+// }
 
 function handleLike(tweetUuid){ 
     const targetTweetObj = tweetsData.filter((tweet) => {   //shallow copy of tweetsData object created, it means the original data is modifiable with every new change

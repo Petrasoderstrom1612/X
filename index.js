@@ -24,7 +24,8 @@ function getFeedHtml(tweets){ //THE HTML CREATOR
                 <div class="tweet-inner">
                 <img src="${oneReply.profilePic}" class="profile-pic">
                 <div>
-                                <p class="handle">${oneReply.handle}</p><button id="delete-tweet">X</button>
+                                <p class="handle ${oneTweet.handle === 'Petra' ? 'fixed-margin' : ''}">${oneReply.handle}</p>
+                                <button data-delete-own-tweet="${oneTweet.uuid}" class="delete ${oneTweet.handle === 'Petra' ? '' : 'hidden'}">X</button>
                                 <p class="tweet-text">${oneReply.tweetText}</p>
                             </div>
                             </div>
@@ -41,7 +42,7 @@ function getFeedHtml(tweets){ //THE HTML CREATOR
         <div class="tweet-inner">
         <img src="${oneTweet.profilePic}" class="profile-pic">
         <div>
-        <p class="handle ${oneTweet.handle === 'Petra' ? 'fixed-margin' : ''}">${oneTweet.handle}</p><button data-delete="${oneTweet.uuid}" class="delete ${oneTweet.handle === 'Petra' ? '' : 'hidden'}">X</button>
+        <p class="handle ${oneTweet.handle === 'Petra' ? 'fixed-margin' : ''}">${oneTweet.handle}</p><button data-delete-own-comment="${oneTweet.uuid}" class="delete ${oneTweet.handle === 'Petra' ? '' : 'hidden'}">X</button>
         <p class="tweet-text">${oneTweet.tweetText}</p>
         <div class="tweet-details">
         <span class="tweet-detail"><i class="fa-regular fa-comment-dots" data-replies="${oneTweet.uuid}"></i>${oneTweet.replies.length} </span>
@@ -81,8 +82,8 @@ function getFeedHtml(tweets){ //THE HTML CREATOR
         else if(e.target.dataset.replyBtn) { 
             addOwnComment(e.target.dataset.replyBtn);
         }
-        else if(e.target.dataset.delete){
-            removeOwnComment(e.target.dataset.delete)
+        else if(e.target.dataset.deleteOwnComment){
+            removeOwnComment(e.target.dataset.deleteOwnComment)
         }
         else if(e.target.dataset.hearts){
             handleLike(e.target.dataset.hearts)
@@ -111,6 +112,10 @@ function getFeedHtml(tweets){ //THE HTML CREATOR
         myInput.value = ""
         render(tweetsData)
     }
+}
+
+function removeOwnTweet(){
+console.log("bo")
 }
 
 function toggleComments(tweetUuid){
@@ -197,6 +202,6 @@ function handleRetweet(tweetUuid){
 // }
 
 //gör det så att om jag skrev en kommentar, kommentarerna inte blir hide 
-// radera min komment, 
-// radera min tweet ✅
+// radera min komment✅
+// radera min tweet 
 // spara saker i local host

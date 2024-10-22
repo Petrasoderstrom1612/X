@@ -167,6 +167,7 @@ function removeOwnComment(tweetUuid, commentUuid) {
     } 
 
     render(tweetsData);
+    toggleComments(tweetUuid)
 }
 
 
@@ -222,7 +223,7 @@ function handleRetweet(tweetUuid){
 //         }
 // }
 
-//gör det så att om jag skrev en kommentar, kommentarerna inte blir hide 
+//gör det så att om jag raderar en kommentar men det finns andra kvar, kommentatörsfältet stängs inte ner✅
 // radera min komment✅
-// radera min tweet 
+// radera min tweet ✅
 // spara saker i local host

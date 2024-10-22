@@ -1,5 +1,24 @@
-import {tweetsData} from "./data.js"
+import { tweetsData as initialTweetsData } from "./data.js"
 import { v4 as uuidv4 } from 'https://jspm.dev/uuid'
+
+let tweetsData = JSON.parse(localStorage.getItem("tweetsData")) || initialTweetsData; // Initialize tweetsData from localStorage, or use an empty array if not present
+
+
+function loadTweetsFromLocalStorage() {
+    const storedTweets = JSON.parse(localStorage.getItem("tweetsData"));
+    if (storedTweets) {
+        tweetsData = storedTweets; // Update tweetsData with stored values
+    }
+    render(tweetsData);  // Render the tweets on page load
+}
+
+loadTweetsFromLocalStorage(); // Call this function initially to load and render tweets from localStorage
+
+function saveToLocalStorage() {
+    localStorage.setItem("tweetsData", JSON.stringify(tweetsData));
+}
+
+
 
 
 function getFeedHtml(tweets){ //THE HTML CREATOR
@@ -114,7 +133,7 @@ document.addEventListener("click",(e) => { // LISTENERS ON ICON CLICKS VIA DATAS
                 isRetweeted: false,
                 uuid: uuidv4()
                 }
-
+            saveToLocalStorage();  // Save the updated tweetsData to localStorage !!!
             tweetsData.unshift(petrasTweet) //add it highest upp to the array
             myInput.value = ""
             render(tweetsData)
@@ -125,6 +144,7 @@ document.addEventListener("click",(e) => { // LISTENERS ON ICON CLICKS VIA DATAS
         const targetTweetIndex = tweetsData.findIndex((tweet) => tweet.uuid === tweetUuid);
         if (targetTweetIndex !== -1 && tweetsData[targetTweetIndex].handle === "Petra") {
             tweetsData.splice(targetTweetIndex, 1);
+            saveToLocalStorage();  // Save the updated tweetsData to localStorage
         }
         render(tweetsData);
     }
@@ -145,6 +165,7 @@ document.addEventListener("click",(e) => { // LISTENERS ON ICON CLICKS VIA DATAS
                         })
                     }
                 })
+            saveToLocalStorage();  // Save the updated tweetsData to localStorage
             }
         myComment = ""
         render(tweetsData)
@@ -160,7 +181,7 @@ document.addEventListener("click",(e) => { // LISTENERS ON ICON CLICKS VIA DATAS
         
         if (targetReplyIndex !== -1) { //if reply was found, its index will be 0 or positive number, as index -1 does not exist
             targetTweetObj.replies.splice(targetReplyIndex, 1);
-            console.log("Removed comment:", commentUuid);
+            saveToLocalStorage();  // Save the updated tweetsData to localStorage
         } 
         
         render(tweetsData);
@@ -225,5 +246,3 @@ document.addEventListener("click",(e) => { // LISTENERS ON ICON CLICKS VIA DATAS
 //         }
 // }
 
-
-// spara saker i local host

@@ -24,11 +24,11 @@ function getFeedHtml(tweets){ //THE HTML CREATOR
                 <div class="tweet-inner">
                 <img src="${oneReply.profilePic}" class="profile-pic">
                 <div>
-                                <p class="handle ${oneTweet.handle === 'Petra' ? 'fixed-margin' : ''}">${oneReply.handle}</p>
-                                <button data-delete-own-tweet="${oneTweet.uuid}">X</button>
-                                <p class="tweet-text">${oneReply.tweetText}</p>
-                            </div>
-                            </div>
+                    <p class="handle ${oneTweet.handle === 'Petra' ? 'fixed-margin' : ''}">${oneReply.handle}</p>
+                    <button data-delete-own-reply="${oneTweet.uuid}+${oneReply.commentUuid}">X</button>
+                    <p class="tweet-text">${oneReply.tweetText}</p>
+                </div>
+                </div>
                 </div>
                 
                 `
@@ -82,6 +82,18 @@ function getFeedHtml(tweets){ //THE HTML CREATOR
         else if(e.target.dataset.replies){
             toggleComments(e.target.dataset.replies)
         }
+        else if(e.target.dataset.deleteOwnReply) {
+            // Split the dataset value into tweetUuid and commentUuid
+            console.log(e.target.dataset.deleteOwnReply)
+            const [tweetUuid, commentUuid] = e.target.dataset.deleteOwnReply.split('+');
+            
+            if (tweetUuid && commentUuid) {
+                // Call the removeOwnComment function with both arguments
+                removeOwnComment(tweetUuid, commentUuid);
+            } else {
+                console.error("Invalid dataset format for deleteOwnComment.");
+            }
+        }
         else if(e.target.dataset.replyBtn) { 
             addOwnComment(e.target.dataset.replyBtn);
         }
@@ -114,19 +126,19 @@ function getFeedHtml(tweets){ //THE HTML CREATOR
     }
 }
 
-    function removeOwnTweet(tweetUuid){
+function removeOwnTweet(tweetUuid){
     const targetTweetIndex = tweetsData.findIndex((tweet) => tweet.uuid === tweetUuid);
     if (targetTweetIndex !== -1 && tweetsData[targetTweetIndex].handle === "Petra") {
         tweetsData.splice(targetTweetIndex, 1);
     }
     render(tweetsData);
 }
+
+function toggleComments(tweetUuid){
+    document.getElementById(`replies-${tweetUuid}`).classList.toggle("hidden")
+} //no need for rerender as you do not modify the data
     
-    function toggleComments(tweetUuid){
-        document.getElementById(`replies-${tweetUuid}`).classList.toggle("hidden")
-    } //no need for rerender as you do not modify the data
-    
-    function addOwnComment(tweetUuid){
+function addOwnComment(tweetUuid){
         const InputField = document.getElementById(`reply-input-${tweetUuid}`)
         let myComment = InputField.value
         
@@ -136,7 +148,8 @@ function getFeedHtml(tweets){ //THE HTML CREATOR
                     tweet.replies.push({
                         handle: "Petra",
                         profilePic: `images/chamelleon.jpg`,
-                        tweetText: myComment
+                        tweetText: myComment,
+                        commentUuid: uuidv4()
                     })
                 }
             })
@@ -146,13 +159,32 @@ function getFeedHtml(tweets){ //THE HTML CREATOR
     toggleComments(tweetUuid)
 }
 
-// function removeOwnComment(tweetUuid) {
-//     const targetTweetIndex = tweetsData.findIndex((tweet) => tweet.uuid === tweetUuid);
-//     if (targetTweetIndex !== -1 && tweetsData[targetTweetIndex].handle === "Petra") {
-//         tweetsData.splice(targetTweetIndex, 1);
-//     }
-//     render(tweetsData);
-// }
+function removeOwnComment(tweetUuid, commentUuid) {
+    // Find the tweet object based on tweetUuid
+    const targetTweetObj = tweetsData.find((tweet) => tweet.uuid === tweetUuid);
+
+    if (!targetTweetObj) {
+        console.error("Tweet not found for UUID:", tweetUuid);
+        return;
+    }
+
+    // Find the reply with handle "Petra" and matching commentUuid
+    const targetReplyIndex = targetTweetObj.replies.findIndex(reply => 
+        reply.handle === "Petra" && reply.commentUuid === commentUuid
+    );
+
+    if (targetReplyIndex !== -1) {
+        // Remove the comment from the replies array
+        targetTweetObj.replies.splice(targetReplyIndex, 1);
+        console.log("Removed comment:", commentUuid);
+    } else {
+        console.error("Reply not found for handle 'Petra' with UUID:", commentUuid);
+    }
+
+    // Re-render the updated tweets data
+    render(tweetsData);
+}
+
 
 function handleLike(tweetUuid){ 
     const targetTweetObj = tweetsData.filter((tweet) => {   //shallow copy of tweetsData object created, it means the original data is modifiable with every new change

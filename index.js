@@ -24,8 +24,8 @@ function getFeedHtml(tweets){ //THE HTML CREATOR
                 <div class="tweet-inner">
                 <img src="${oneReply.profilePic}" class="profile-pic">
                 <div>
-                    <p class="handle ${oneTweet.handle === 'Petra' ? 'fixed-margin' : ''}">${oneReply.handle}</p>
-                    <button data-delete-own-reply="${oneTweet.uuid}+${oneReply.commentUuid}">X</button>
+                    <p class="handle ${oneReply.handle === 'Petra' ? 'fixed-margin-comment' : ''}">${oneReply.handle}</p>
+                    <button data-delete-own-reply="${oneTweet.uuid}+${oneReply.commentUuid}" class="delete-comment ${oneReply.handle === 'Petra' ? '' : 'hidden-comment'}">X</button>
                     <p class="tweet-text">${oneReply.tweetText}</p>
                 </div>
                 </div>
@@ -42,7 +42,8 @@ function getFeedHtml(tweets){ //THE HTML CREATOR
         <div class="tweet-inner">
         <img src="${oneTweet.profilePic}" class="profile-pic">
         <div>
-        <p class="handle ${oneTweet.handle === 'Petra' ? 'fixed-margin' : ''}">${oneTweet.handle}</p><button data-delete-own-tweet="${oneTweet.uuid}" class="delete ${oneTweet.handle === 'Petra' ? '' : 'hidden'}">X</button>
+        <p class="handle ${oneTweet.handle === 'Petra' ? 'fixed-margin' : ''}">${oneTweet.handle}</p>
+        <button data-delete-own-tweet="${oneTweet.uuid}" class="delete ${oneTweet.handle === 'Petra' ? '' : 'hidden'}">X</button>
         <p class="tweet-text">${oneTweet.tweetText}</p>
         <div class="tweet-details">
         <span class="tweet-detail"><i class="fa-regular fa-comment-dots" data-replies="${oneTweet.uuid}"></i>${oneTweet.replies.length} </span>

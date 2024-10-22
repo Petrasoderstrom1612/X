@@ -157,5 +157,18 @@ textarea{
 }
 
 .fixed-margin{
-   margin-bottom:-25px;
+    margin-bottom:-25px;
+}
+.delete-comment{
+    position: relative;
+    left: 137px;
+    top: 7px;
+}
+
+.fixed-margin-comment{
+    margin-bottom:-25px;
+}
+
+.hidden-comment{
+    display: none;
 }

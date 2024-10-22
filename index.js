@@ -1,13 +1,13 @@
 import { tweetsData as initialTweetsData } from "./data.js"
 import { v4 as uuidv4 } from 'https://jspm.dev/uuid'
 
-let tweetsData = JSON.parse(localStorage.getItem("tweetsData")) || initialTweetsData; // Initialize tweetsData from localStorage, or use an empty array if not present
+let tweetsData = JSON.parse(localStorage.getItem("tweetsData")) || initialTweetsData; // Initialize tweetsData from localStorage, or use the hardcoded one from data.js if you did not use the app before
 
 
 function loadTweetsFromLocalStorage() {
     const storedTweets = JSON.parse(localStorage.getItem("tweetsData"));
     if (storedTweets) {
-        tweetsData = storedTweets; // Update tweetsData with stored values
+        tweetsData = storedTweets; // Update tweetsData with stored values. Since we always update tweetsData in our functions with saveToLocalStorage(), we override whatever is in local storage on initial render (as this function only runs when you start the page). This is when you have used the app before, hence previously had saved stuff in local storage.
     }
     render(tweetsData);  // Render the tweets on page load
 }
@@ -133,7 +133,7 @@ document.addEventListener("click",(e) => { // LISTENERS ON ICON CLICKS VIA DATAS
                 isRetweeted: false,
                 uuid: uuidv4()
                 }
-            saveToLocalStorage();  // Save the updated tweetsData to localStorage !!!
+            saveToLocalStorage();  // Save the updated tweetsData to localStorage
             tweetsData.unshift(petrasTweet) //add it highest upp to the array
             myInput.value = ""
             render(tweetsData)

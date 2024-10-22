@@ -65,75 +65,72 @@ function getFeedHtml(tweets){ //THE HTML CREATOR
         return tweetsection
     }
     
-    function render(tweets){ //you can place any word in here as long as it matches within the function, the function above gets it that it is the same thing, it is the render call with the real data.js that is avgörande. Also if you call the real thing every time, you do not need any arguments in any of the functions.
-        document.getElementById('feed').innerHTML = getFeedHtml(tweets)
+function render(tweets){ //you can place any word in here as long as it matches within the function, the function above gets it that it is the same thing, it is the render call with the real data.js that is avgörande. Also if you call the real thing every time, you do not need any arguments in any of the functions.
+    document.getElementById('feed').innerHTML = getFeedHtml(tweets)
+}
+
+render(tweetsData)
+    
+    
+    
+document.addEventListener("click",(e) => { // LISTENERS ON ICON CLICKS VIA DATASET, FUNCTIONS LISTED BELOW, also click on id for main tweet button
+    if(e.target.id === "tweet-btn"){
+        addOwnTweet()
     }
-    
-    render(tweetsData)
-    
-    
-    
-    document.addEventListener("click",(e) => { // LISTENERS ON ICON CLICKS VIA DATASET, FUNCTIONS LISTED BELOW, also click on id for main tweet button
-        if(e.target.id === "tweet-btn"){
-            addOwnTweet()
+    else if(e.target.dataset.deleteOwnTweet){
+        removeOwnTweet(e.target.dataset.deleteOwnTweet)
+    }
+    else if(e.target.dataset.replies){
+        toggleComments(e.target.dataset.replies)
+    }
+    else if(e.target.dataset.replyBtn) { 
+        addOwnComment(e.target.dataset.replyBtn);
+    }
+    else if(e.target.dataset.deleteOwnReply) { //jag ska bara kunna radera mina egna kommentarer
+        const [tweetUuid, commentUuid] = e.target.dataset.deleteOwnReply.split('+');
+        if (tweetUuid && commentUuid) { //bara jag får commentUuid i comment section
+            removeOwnComment(tweetUuid, commentUuid);
         }
-        else if(e.target.dataset.deleteOwnTweet){
-            removeOwnTweet(e.target.dataset.deleteOwnTweet)
-        }
-        else if(e.target.dataset.replies){
-            toggleComments(e.target.dataset.replies)
-        }
-        else if(e.target.dataset.replyBtn) { 
-            addOwnComment(e.target.dataset.replyBtn);
-        }
-        else if(e.target.dataset.deleteOwnReply) { //jag ska bara kunna radera mina egna kommentarer
-            const [tweetUuid, commentUuid] = e.target.dataset.deleteOwnReply.split('+');
-            if (tweetUuid && commentUuid) { //bara jag får commentUuid i comment section
-                removeOwnComment(tweetUuid, commentUuid);
-            }
-        }
-        else if(e.target.dataset.hearts){
-            handleLike(e.target.dataset.hearts)
-        }
-        else if(e.target.dataset.retweets){
-            handleRetweet(e.target.dataset.retweets)
-        }
+    }
+    else if(e.target.dataset.hearts){
+        handleLike(e.target.dataset.hearts)
+    }
+    else if(e.target.dataset.retweets){
+        handleRetweet(e.target.dataset.retweets)
+    }
 })
 
- function addOwnTweet(){
-    const myInput = document.getElementById("my-input")
-    if(myInput.value){ //only if you type something
-        const petrasTweet = {
-            handle: `Petra`,
-            profilePic: `images/chamelleon.jpg`,
-            likes: 0,
-            retweets: 0,
-            tweetText: myInput.value,
-            replies: [],
-            isLiked: false,
-            isRetweeted: false,
-            uuid: uuidv4()
-            }
+    function addOwnTweet(){
+        const myInput = document.getElementById("my-input")
+        if(myInput.value){ //only if you type something
+            const petrasTweet = {
+                handle: `Petra`,
+                profilePic: `images/chamelleon.jpg`,
+                likes: 0,
+                retweets: 0,
+                tweetText: myInput.value,
+                replies: [],
+                isLiked: false,
+                isRetweeted: false,
+                uuid: uuidv4()
+                }
 
-        tweetsData.unshift(petrasTweet) //add it highest upp to the array
-        myInput.value = ""
-        render(tweetsData)
+            tweetsData.unshift(petrasTweet) //add it highest upp to the array
+            myInput.value = ""
+            render(tweetsData)
+        }
     }
-}
 
-function removeOwnTweet(tweetUuid){
-    const targetTweetIndex = tweetsData.findIndex((tweet) => tweet.uuid === tweetUuid);
-    if (targetTweetIndex !== -1 && tweetsData[targetTweetIndex].handle === "Petra") {
-        tweetsData.splice(targetTweetIndex, 1);
+    function removeOwnTweet(tweetUuid){
+        const targetTweetIndex = tweetsData.findIndex((tweet) => tweet.uuid === tweetUuid);
+        if (targetTweetIndex !== -1 && tweetsData[targetTweetIndex].handle === "Petra") {
+            tweetsData.splice(targetTweetIndex, 1);
+        }
+        render(tweetsData);
     }
-    render(tweetsData);
-}
 
-function toggleComments(tweetUuid){
-    document.getElementById(`replies-${tweetUuid}`).classList.toggle("hidden")
-} //no need for rerender as you do not modify the data
-    
-function addOwnComment(tweetUuid){
+
+    function addOwnComment(tweetUuid){
         const InputField = document.getElementById(`reply-input-${tweetUuid}`)
         let myComment = InputField.value
         
@@ -144,68 +141,71 @@ function addOwnComment(tweetUuid){
                         handle: "Petra",
                         profilePic: `images/chamelleon.jpg`,
                         tweetText: myComment,
-                        commentUuid: uuidv4()
-                    })
-                }
-            })
-        }
-    myComment = ""
-    render(tweetsData)
-    toggleComments(tweetUuid)
-}
-
-function removeOwnComment(tweetUuid, commentUuid) {
-    const targetTweetObj = tweetsData.find((tweet) => tweet.uuid === tweetUuid);
-
-    const targetReplyIndex = targetTweetObj.replies.findIndex(reply => 
-        reply.handle === "Petra" && reply.commentUuid === commentUuid
-    );
-
-    if (targetReplyIndex !== -1) { //if reply was found, its index will be 0 or positive number, as index -1 does not exist
-        targetTweetObj.replies.splice(targetReplyIndex, 1);
-        console.log("Removed comment:", commentUuid);
-    } 
-
-    render(tweetsData);
-    if(targetTweetObj.replies.length > 0){
+                            commentUuid: uuidv4()
+                        })
+                    }
+                })
+            }
+        myComment = ""
+        render(tweetsData)
         toggleComments(tweetUuid)
     }
-}
-
-
-function handleLike(tweetUuid){ 
-    const targetTweetObj = tweetsData.filter((tweet) => {   //shallow copy of tweetsData object created, it means the original data is modifiable with every new change
-        return tweet.uuid === tweetUuid                     //when you filter, you want to return truth or false
-    })[0]                                                   //filter method iterates over an array of objects and returns a shallow copy with a filtered out array, if you want to return object, then use [] 
     
-    console.log(targetTweetObj)//when modifying advanced data types such as objects and arrays, you modify the type on the heap, in other words, the original changes
-    console.log(tweetsData) //same SHALLOW
-    
-    if (targetTweetObj.isLiked){
-        targetTweetObj.likes-- //modifying the filtered shallow copy
-    }
-    else{
-        targetTweetObj.likes++  //modifying the filtered shallow copy
-    }
-    targetTweetObj.isLiked = !targetTweetObj.isLiked
-    
-    render(tweetsData)  //you need to rerender html as data.js is changed now to see the changes
-}
-
-function handleRetweet(tweetUuid){
-    tweetsData.map((tweet) => { //shallow copy of tweetsData object created, it means the original data is modifiable with every new change
-        if (tweetUuid === tweet.uuid){
-            if(tweet.isRetweeted){
-                tweet.retweets -- //modifying the filtered shallow copy
-            } else if(!tweet.isRetweeted){
-                tweet.retweets ++ //modifying the filtered shallow copy
-            }
-            tweet.isRetweeted = !tweet.isRetweeted
+    function removeOwnComment(tweetUuid, commentUuid) {
+        const targetTweetObj = tweetsData.find((tweet) => tweet.uuid === tweetUuid);
+        
+        const targetReplyIndex = targetTweetObj.replies.findIndex(reply => 
+            reply.handle === "Petra" && reply.commentUuid === commentUuid
+        );
+        
+        if (targetReplyIndex !== -1) { //if reply was found, its index will be 0 or positive number, as index -1 does not exist
+            targetTweetObj.replies.splice(targetReplyIndex, 1);
+            console.log("Removed comment:", commentUuid);
         } 
-    })
+        
+        render(tweetsData);
+        if(targetTweetObj.replies.length > 0){
+            toggleComments(tweetUuid)
+        }
+    }
     
-    render(tweetsData)  //you need to rerender html as data.js is changed now to see the changes
-}
+    function toggleComments(tweetUuid){
+        document.getElementById(`replies-${tweetUuid}`).classList.toggle("hidden")
+    } //no need for rerender as you do not modify the data
+        
+    function handleLike(tweetUuid){ 
+        const targetTweetObj = tweetsData.filter((tweet) => {   //shallow copy of tweetsData object created, it means the original data is modifiable with every new change
+            return tweet.uuid === tweetUuid                     //when you filter, you want to return truth or false
+        })[0]                                                   //filter method iterates over an array of objects and returns a shallow copy with a filtered out array, if you want to return object, then use [] 
+        
+        console.log(targetTweetObj)//when modifying advanced data types such as objects and arrays, you modify the type on the heap, in other words, the original changes
+        console.log(tweetsData) //same SHALLOW
+        
+        if (targetTweetObj.isLiked){
+            targetTweetObj.likes-- //modifying the filtered shallow copy
+        }
+        else{
+            targetTweetObj.likes++  //modifying the filtered shallow copy
+        }
+        targetTweetObj.isLiked = !targetTweetObj.isLiked
+        
+        render(tweetsData)  //you need to rerender html as data.js is changed now to see the changes
+    }
+
+    function handleRetweet(tweetUuid){
+        tweetsData.map((tweet) => { //shallow copy of tweetsData object created, it means the original data is modifiable with every new change
+            if (tweetUuid === tweet.uuid){
+                if(tweet.isRetweeted){
+                    tweet.retweets -- //modifying the filtered shallow copy
+                } else if(!tweet.isRetweeted){
+                    tweet.retweets ++ //modifying the filtered shallow copy
+                }
+                tweet.isRetweeted = !tweet.isRetweeted
+            } 
+        })
+        
+        render(tweetsData)  //you need to rerender html as data.js is changed now to see the changes
+    }
 
 
 

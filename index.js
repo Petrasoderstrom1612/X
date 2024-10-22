@@ -167,7 +167,9 @@ function removeOwnComment(tweetUuid, commentUuid) {
     } 
 
     render(tweetsData);
-    toggleComments(tweetUuid)
+    if(targetTweetObj.replies.length > 0){
+        toggleComments(tweetUuid)
+    }
 }
 
 
@@ -223,7 +225,5 @@ function handleRetweet(tweetUuid){
 //         }
 // }
 
-//gör det så att om jag raderar en kommentar men det finns andra kvar, kommentatörsfältet stängs inte ner✅
-// radera min komment✅
-// radera min tweet ✅
+
 // spara saker i local host

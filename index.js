@@ -83,20 +83,14 @@ function getFeedHtml(tweets){ //THE HTML CREATOR
         else if(e.target.dataset.replies){
             toggleComments(e.target.dataset.replies)
         }
-        else if(e.target.dataset.deleteOwnReply) {
-            // Split the dataset value into tweetUuid and commentUuid
-            console.log(e.target.dataset.deleteOwnReply)
-            const [tweetUuid, commentUuid] = e.target.dataset.deleteOwnReply.split('+');
-            
-            if (tweetUuid && commentUuid) {
-                // Call the removeOwnComment function with both arguments
-                removeOwnComment(tweetUuid, commentUuid);
-            } else {
-                console.error("Invalid dataset format for deleteOwnComment.");
-            }
-        }
         else if(e.target.dataset.replyBtn) { 
             addOwnComment(e.target.dataset.replyBtn);
+        }
+        else if(e.target.dataset.deleteOwnReply) { //jag ska bara kunna radera mina egna kommentarer
+            const [tweetUuid, commentUuid] = e.target.dataset.deleteOwnReply.split('+');
+            if (tweetUuid && commentUuid) { //bara jag får commentUuid i comment section
+                removeOwnComment(tweetUuid, commentUuid);
+            }
         }
         else if(e.target.dataset.hearts){
             handleLike(e.target.dataset.hearts)
@@ -161,28 +155,17 @@ function addOwnComment(tweetUuid){
 }
 
 function removeOwnComment(tweetUuid, commentUuid) {
-    // Find the tweet object based on tweetUuid
     const targetTweetObj = tweetsData.find((tweet) => tweet.uuid === tweetUuid);
 
-    if (!targetTweetObj) {
-        console.error("Tweet not found for UUID:", tweetUuid);
-        return;
-    }
-
-    // Find the reply with handle "Petra" and matching commentUuid
     const targetReplyIndex = targetTweetObj.replies.findIndex(reply => 
         reply.handle === "Petra" && reply.commentUuid === commentUuid
     );
 
-    if (targetReplyIndex !== -1) {
-        // Remove the comment from the replies array
+    if (targetReplyIndex !== -1) { //if reply was found, its index will be 0 or positive number, as index -1 does not exist
         targetTweetObj.replies.splice(targetReplyIndex, 1);
         console.log("Removed comment:", commentUuid);
-    } else {
-        console.error("Reply not found for handle 'Petra' with UUID:", commentUuid);
-    }
+    } 
 
-    // Re-render the updated tweets data
     render(tweetsData);
 }
 

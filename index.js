@@ -25,16 +25,11 @@ function getFeedHtml(tweets){ //THE HTML CREATOR
     let tweetsection = ""
     
     tweets.forEach((oneTweet) =>{         //I USED FOREACH IN THE FIRST BIG FORLOOP TO HAVE VARIATION
-        let heartsClass = ""
-        let retweetClass = ""
         let comments = ""
         
-        if(oneTweet.isLiked){ //checking in the data.js which I might have modified through shallow copy
-            heartsClass = "liked"
-        }
-        if(oneTweet.isRetweeted){ //checking in the data.js which I might have modified through shallow copy
-            retweetClass = "retweeted"
-        }
+        
+        const heartsClass = oneTweet.isLiked ? "liked" : ""
+        const retweetClass = oneTweet.isRetweeted ? "retweeted" : ""  //you can normally place null in ternarys but since here it will be a class, better to leave it empty so it does not look weird in inspector tools
         
         if (oneTweet.replies.length > 0){ //DEEPER LOOP IN IF TO GET OBJECTS IN THE ARRAY OF REPLIES IN EVERY TWEET INSIDE OF A VARIABLE
             for (let oneReply of oneTweet.replies){

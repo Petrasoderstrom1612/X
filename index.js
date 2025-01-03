@@ -80,7 +80,7 @@ function getFeedHtml(tweets){ //THE HTML CREATOR
     }
     
 function render(tweets){ //you can place any word in here as long as it matches within the function, the function above gets it that it is the same thing, it is the render call with the real data.js that is avgörande. Also if you call the real thing every time, you do not need any arguments in any of the functions.
-    document.getElementById('feed').innerHTML = getFeedHtml(tweets)
+    document.getElementById('feed').innerHTML = getFeedHtml(tweets) //you do this as a separate function because we want to separate tasks in JS
 }
 
 render(tweetsData)

@@ -83,7 +83,7 @@ function render(tweets){ //you can place any word in here as long as it matches 
     document.getElementById('feed').innerHTML = getFeedHtml(tweets) //you do this as a separate function because we want to separate tasks in JS
 }
 
-render(tweetsData)
+render(tweetsData) 
     
     
     
@@ -205,7 +205,7 @@ document.addEventListener("click",(e) => { // LISTENERS ON ICON CLICKS VIA DATAS
         }
         targetTweetObj.isLiked = !targetTweetObj.isLiked
         
-        render(tweetsData)  //you need to rerender html as data.js is changed now to see the changes
+        render(tweetsData)  //you need to rerender html as data.js is changed now to see the changes. Also note how you take advantage of the shallow copy targetTweetObj you created on the heap based on tweetsData
     }
 
     function handleRetweet(tweetUuid){
